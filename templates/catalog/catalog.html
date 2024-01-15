@@ -1,0 +1,22 @@
+{% extends '_base.html' %}
+
+{% block title %}Каталог{% endblock %}
+{% block content %}
+    <div class="content">
+        {% for film in films %}
+            <div class="content__film">
+                <img class="film__image" src="/media/{{ film.image }}" alt="">
+                <a href="{% url 'film' film.id %}" class="film__title">{{ film.title }}</a>
+                <p class="film__description">{{ film.short_description }}</p>
+                <div class="film_genres">
+                    {% for genree in film.genres.all %}
+                    <p>{{ genree.name }}</p>
+                    {% endfor %}
+                </div>
+                <p>Длительность: {{ film.duration }}</p>
+                <p>Возраст: {{ film.ageRestriction }}+</p>
+                <p>Рейтинг: {{ film.rating }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

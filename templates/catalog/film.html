@@ -1,0 +1,51 @@
+{% extends '_base.html' %}
+
+{% block title %}Фильм{% endblock %}
+{% block content %}
+    <div class="film">
+        <img class="film_show_image" src="/media/{{ film.image }}" alt="">
+        <h1>{{ film.title }}</h1>
+        <h2 class="film__show_description">{{ film.description }}</h2>
+        <div class="film_show_genres">
+            {% for genree in film.genres.all %}
+                    <p>{{ genree.name }}</p>
+            {% endfor %}
+        </div>
+        <h2>Длительность: {{ film.duration }}</h2>
+        <h2>Возраст: {{ film.ageRestriction }}+</h2>
+        <h2>Рейтинг: {{ film.rating }}</h2>
+        <div class="tickets">
+            <h2>Билеты для покупки:</h2>
+            <div class="tickets_aviable">
+                {% for ticket in tickets %}
+                    <div class="ticketA">
+                        <p>{{ ticket.film.title }}</p>
+                        <p>{{ ticket.price }}</p>
+                        <p>{{ ticket.validity_period }}</p>
+                        <form method="POST" action="/film/buy_ticket">
+                            {% csrf_token %}
+                            <input name="film_id" type="text" value="{{ film.id }}" style="display: none;">
+                            <button type="submit">купить</button>
+                        </form>
+                    </div>
+                {% endfor %}
+            </div>
+            <h2>Купленные билеты:</h2>
+            <div class="tickets_aviable">
+                {% for ticket in tickets_purchased %}
+                    <div class="ticketA">
+                        <p>{{ ticket.film.title }}</p>
+                        <p>{{ ticket.price }}</p>
+                        <p>{{ ticket.validity_period }}</p>
+                        <form method="POST" action="/film/remove_ticket">
+                            {% csrf_token %}
+                            <input name="ticket_id" type="text" value="{{ ticket.id }}" style="display: none;">
+                            <input name="film_id" value="{{ film.id }}" type="text" style="display:none;">
+                            <button type="submit">вернуть</button>
+                        </form>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
